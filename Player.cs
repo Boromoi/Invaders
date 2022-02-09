@@ -31,8 +31,9 @@ namespace MonoGameInvaders
 
             // Alter velocity when keys are pressed
             if (Global.keys.IsKeyDown(Keys.Left)) velocity.X = -10.0f;
-            if (Global.keys.IsKeyDown(Keys.Right)) velocity.X = 10.0f;           
+            if (Global.keys.IsKeyDown(Keys.Right)) velocity.X = 10.0f;
 
+            // Update the position using the velocity
             position += velocity;
 
             // "clamp" the x-position to make sure it never goes out of screen bounds           
@@ -44,7 +45,5 @@ namespace MonoGameInvaders
         {
             Global.spriteBatch.Draw(texture, position, Color.White);
         }
-
-       
     }
 }
