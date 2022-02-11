@@ -21,13 +21,19 @@ namespace MonoGameInvaders
         Bullet theBullet;
         MotherShip motherShip;
         List<Shield> shields = new List<Shield>();
-        List<Invader> invaders = new List<Invader>();
+        List<YellowInvader> yellowInvaders = new List<YellowInvader>();
+        List<GreenInvader> greenInvaders = new List<GreenInvader>();
+        List<RedInvader> redInvaders = new List<RedInvader>();
+        List<BlueInvader> blueInvaders = new List<BlueInvader>();
         
+        //public string[] addRandomInvaderType = { "AddRedInvader", "AddBlueInvader", "AddGreenInvader", "AddYellowInvader" };
+        List<Invader> invaders = new List<Invader>();
+
 
         public Game1()
             : base()
         {
-            graphics = new GraphicsDeviceManager(this);            
+            graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferHeight = 600;
             graphics.PreferredBackBufferWidth = 800;
             graphics.ApplyChanges();
@@ -44,7 +50,7 @@ namespace MonoGameInvaders
         protected override void Initialize()
         {
             // Pass often referenced variables to Global
-            Global.GraphicsDevice = GraphicsDevice;            
+            Global.GraphicsDevice = GraphicsDevice;
             Global.content = Content;
 
             // Create and Initialize game objects
@@ -54,7 +60,7 @@ namespace MonoGameInvaders
 
             for (int i = 0; i < 10; i++)
             {
-                AddInvader();
+                AddInvader();   //addRandomInvaderType[new Random().Next(0, addRandomInvaderType.Length)]();
             }
 
             for (int i = 0; i < 4; i++)
@@ -74,6 +80,30 @@ namespace MonoGameInvaders
         {
             var currentInvader = new Invader();
             invaders.Add(currentInvader);
+        }
+
+        private void AddYellowInvader()
+        {
+            var currentInvader = new YellowInvader();
+            yellowInvaders.Add(currentInvader);
+        }
+
+        private void AddRedInvader()
+        {
+            var currentInvader = new RedInvader();
+            redInvaders.Add(currentInvader);
+        }
+
+        private void AddBlueInvader()
+        {
+            var currentInvader = new BlueInvader();
+            blueInvaders.Add(currentInvader);
+        }
+
+        private void AddGreenInvader()
+        {
+            var currentInvader = new GreenInvader();
+            greenInvaders.Add(currentInvader);
         }
 
         private void AddShield()
@@ -113,7 +143,7 @@ namespace MonoGameInvaders
             // Update the game objects
             thePlayer.Update();
             theBullet.Update();
-            
+
             foreach (var invader in invaders)
             {
                 invader.Update();
@@ -151,7 +181,7 @@ namespace MonoGameInvaders
                     }
                 }
             }
-            
+
             motherShip.Update();
             if (Overlaps(theBullet.position, theBullet.texture, motherShip.position, motherShip.texture) && theBullet.isFired && !motherShip.dead)
             {
@@ -167,7 +197,7 @@ namespace MonoGameInvaders
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
-        {            
+        {
             spriteBatch.Begin();
             // Draw the background (and clear the screen)
             spriteBatch.Draw(background, Global.screenRect, Color.White);
@@ -186,12 +216,12 @@ namespace MonoGameInvaders
 
             foreach (var shield in shields)
             {
-                if(!shield.dead)
+                if (!shield.dead)
                 {
                     shield.Draw();
                 }
             }
-            
+
             if (!motherShip.dead)
             {
                 motherShip.Draw();

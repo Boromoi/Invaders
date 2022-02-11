@@ -14,6 +14,7 @@ namespace MonoGameInvaders
         public int hp;
         public bool dead;
         public string[] invaderType = { "spr_red_invader", "spr_blue_invader", "spr_green_invader" , "spr_yellow_invader" };
+        public string assetName;
 
         public Invader()
         {

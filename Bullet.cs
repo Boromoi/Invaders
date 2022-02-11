@@ -34,7 +34,7 @@ namespace MonoGameInvaders
         {
             if (isFired)
             {
-                if(position.Y < 0)
+                if (position.Y < 0)
                 {
                     Reset();
                 }
@@ -44,7 +44,7 @@ namespace MonoGameInvaders
 
         public void Draw()
         {
-            if(isFired)
+            if (isFired)
             {
                 Global.spriteBatch.Draw(texture, position, Color.White);
             }
