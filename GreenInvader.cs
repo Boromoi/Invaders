@@ -6,11 +6,17 @@ namespace MonoGameInvaders
 {
     class GreenInvader : Invader
     {
-        private Invader invader = new Invader();
-
-        public GreenInvader()
+        public InvaderTypes InvaderType => InvaderTypes.Green;
+        const string AssetName = "spr_green_invader";
+        public GreenInvader():base(AssetName)
         {
-            invader.assetName = "spr_green_invader";
+            position.X = Global.Random(100, Global.width - 100);
+            position.Y = texture.Height;
+
+            velocity.X = 3.0f;
+
+            HitPoints = 1;
+            dead = false;
         }
     }
 }

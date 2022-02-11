@@ -21,14 +21,8 @@ namespace MonoGameInvaders
         Bullet theBullet;
         MotherShip motherShip;
         List<Shield> shields = new List<Shield>();
-        List<YellowInvader> yellowInvaders = new List<YellowInvader>();
-        List<GreenInvader> greenInvaders = new List<GreenInvader>();
-        List<RedInvader> redInvaders = new List<RedInvader>();
-        List<BlueInvader> blueInvaders = new List<BlueInvader>();
         
-        //public string[] addRandomInvaderType = { "AddRedInvader", "AddBlueInvader", "AddGreenInvader", "AddYellowInvader" };
         List<Invader> invaders = new List<Invader>();
-
 
         public Game1()
             : base()
@@ -57,10 +51,11 @@ namespace MonoGameInvaders
             thePlayer = new Player();
             theBullet = new Bullet();
             motherShip = new MotherShip();
-
+            
+            invaders.Add(motherShip);
             for (int i = 0; i < 10; i++)
             {
-                AddInvader();   //addRandomInvaderType[new Random().Next(0, addRandomInvaderType.Length)]();
+                AddRandomInvader();
             }
 
             for (int i = 0; i < 4; i++)
@@ -76,34 +71,11 @@ namespace MonoGameInvaders
             base.Initialize();
         }
 
-        private void AddInvader()
+        private void AddRandomInvader()
         {
-            var currentInvader = new Invader();
-            invaders.Add(currentInvader);
-        }
-
-        private void AddYellowInvader()
-        {
-            var currentInvader = new YellowInvader();
-            yellowInvaders.Add(currentInvader);
-        }
-
-        private void AddRedInvader()
-        {
-            var currentInvader = new RedInvader();
-            redInvaders.Add(currentInvader);
-        }
-
-        private void AddBlueInvader()
-        {
-            var currentInvader = new BlueInvader();
-            blueInvaders.Add(currentInvader);
-        }
-
-        private void AddGreenInvader()
-        {
-            var currentInvader = new GreenInvader();
-            greenInvaders.Add(currentInvader);
+            var invaderTypeNumber = new Random().Next(1, 4);
+            var invader = Invader.Create((InvaderTypes)invaderTypeNumber);
+            invaders.Add(invader);
         }
 
         private void AddShield()
@@ -111,24 +83,6 @@ namespace MonoGameInvaders
             var currentShield = new Shield();
             shields.Add(currentShield);
         }
-
-        private bool Overlaps(Vector2 position0, Texture2D texture0, Vector2 position1, Texture2D texture1)
-        {
-            int w0 = texture0.Width,
-              h0 = texture0.Height,
-              w1 = texture1.Width,
-              h1 = texture1.Height;
-
-            if (position0.X > position1.X + w1 || position0.X + w0 < position1.X ||
-              position0.Y > position1.Y + h1 || position0.Y + h0 < position1.Y)
-            {
-                return false;
-            }
-
-            else
-                return true;
-        }
-
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -147,47 +101,39 @@ namespace MonoGameInvaders
             foreach (var invader in invaders)
             {
                 invader.Update();
-                if (!invader.dead)
+                if (!invader.dead && theBullet.IsActive)
                 {
-                    if (Overlaps(theBullet.position, theBullet.texture, invader.position, invader.texture) && theBullet.isFired && !invader.dead)
+                    if(invader.IsHit(theBullet))
                     {
-                        invader.hp -= 1;
-                        theBullet.isFired = false;
-                    }
+                        theBullet.IsActive = false;
+                    }    
                 }
             }
 
-            foreach (var shield in shields)
-            {
-                shield.Update();
-                if (!shield.dead)
-                {
-                    if (Overlaps(theBullet.position, theBullet.texture, shield.position, shield.texture) && theBullet.isFired && !shield.dead)
-                    {
-                        shield.hp -= 1;
-                        theBullet.isFired = false;
-                    }
+            //foreach (var shield in shields)
+            //{
+            //    shield.Update();
+            //    if (!shield.dead)
+            //    {
+            //        if (Overlaps(theBullet.position, theBullet.texture, shield.position, shield.texture) && theBullet.IsActive && !shield.dead)
+            //        {
+            //            shield.hp -= 1;
+            //            theBullet.IsActive = false;
+            //        }
 
-                    foreach (var invader in invaders)
-                    {
-                        if (!invader.dead)
-                        {
-                            if (Overlaps(invader.position, invader.texture, shield.position, shield.texture) && !shield.dead)
-                            {
-                                shield.hp -= 1;
-                                invader.hp -= 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            motherShip.Update();
-            if (Overlaps(theBullet.position, theBullet.texture, motherShip.position, motherShip.texture) && theBullet.isFired && !motherShip.dead)
-            {
-                motherShip.hp -= 1;
-                theBullet.isFired = false;
-            }
+            //        foreach (var invader in invaders)
+            //        {
+            //            if (!invader.dead)
+            //            {
+            //                if (Overlaps(invader.position, invader.texture, shield.position, shield.texture) && !shield.dead)
+            //                {
+            //                    shield.hp -= 1;
+            //                    invader.hp -= 1;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             base.Update(gameTime);
         }

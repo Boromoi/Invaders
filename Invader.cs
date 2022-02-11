@@ -6,37 +6,43 @@ using System.Text;
 
 namespace MonoGameInvaders
 {
-    class Invader 
+    abstract class Invader : Ship
     {
-        public Vector2 position;
         public Vector2 velocity;
-        public Texture2D texture;
-        public int hp;
         public bool dead;
-        public string[] invaderType = { "spr_red_invader", "spr_blue_invader", "spr_green_invader" , "spr_yellow_invader" };
-        public string assetName;
 
-        public Invader()
+        public Invader(string assetName)
         {
-            texture = Global.content.Load<Texture2D>(invaderType[new Random().Next(0, invaderType.Length)]);
-            Reset();
+            texture = Global.content.Load<Texture2D>(assetName);
         }
 
-        public void Reset()
+        public static Invader Create(InvaderTypes invaderType)
         {
-            position.X = Global.Random(100, Global.width - 100);
-            position.Y = Global.Random(0, Global.height - 300);
-
-            velocity.X = 3.0f;
-            velocity.Y = 10.0f;
-
-            hp = 1;
-            dead = false;
+            Invader createdInvader = null;
+            switch(invaderType)
+            {
+                case InvaderTypes.Blue: 
+                    createdInvader = new BlueInvader();
+                    break;
+                case InvaderTypes.Red: 
+                    createdInvader = new RedInvader();
+                    break;
+                case InvaderTypes.Yellow: 
+                    createdInvader = new YellowInvader();
+                    break;
+                case InvaderTypes.Green: 
+                    createdInvader = new GreenInvader();
+                    break;
+                case InvaderTypes.Mothership: 
+                    createdInvader = new MotherShip();
+                    break;
+            }
+            return createdInvader;
         }
 
         public void Update()        
         {
-            if (hp == 0)
+            if (HitPoints == 0)
             {
                 dead = true;
             }

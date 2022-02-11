@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,11 +7,19 @@ namespace MonoGameInvaders
 {
     class BlueInvader : Invader
     {
-        private Invader invader = new Invader();
+        public InvaderTypes InvaderType => InvaderTypes.Blue;
 
-        public BlueInvader()
+        const string AssetName = "spr_blue_invader";
+
+        public BlueInvader():base(AssetName)
         {
-            invader.assetName = "spr_blue_invader";
+            position.X = Global.Random(100, Global.width - 100);
+            position.Y = texture.Height;
+
+            velocity.X = 3.0f;
+
+            HitPoints = 1;
+            dead = false;
         }
     }
 }

@@ -6,50 +6,44 @@ using System.Text;
 
 namespace MonoGameInvaders
 {
-    class MotherShip
+    class MotherShip:Invader
     {
-        public Vector2 position;
-        public Vector2 velocity;
-        public Texture2D texture;
-        public int hp;
-        public bool dead;
+        //public Vector2 position;
+        //public Vector2 velocity;
+        //public Texture2D texture;
+        //public int hp;
+        //public bool dead;
 
-        public MotherShip()
-        {
-            texture = Global.content.Load<Texture2D>("spr_enemy_ship");
-            Reset();
-        }
+        const string AssetName = "spr_enemy_ship";
 
-        public void Reset()
+        public MotherShip():base(AssetName)
         {
             position.X = Global.Random(100, Global.width - 100);
             position.Y = texture.Height;
-
             velocity.X = 3.0f;
-
-            hp = 2;
+            HitPoints = 2;
             dead = false;
         }
 
-        public void Update()
-        {
-            position.X += velocity.X;
+        //public void Update()
+        //{
+        //    position.X += velocity.X;
 
-            if ((position.X > Global.width - texture.Width) || (position.X < 0))
-            {
-                position.X -= velocity.X;
-                velocity.X = -velocity.X;
-            }
+        //    if ((position.X > Global.width - texture.Width) || (position.X < 0))
+        //    {
+        //        position.X -= velocity.X;
+        //        velocity.X = -velocity.X;
+        //    }
 
-            if (hp == 0)
-            {
-                dead = true;
-            }
-        }
+        //    if (HitPoints == 0)
+        //    {
+        //        dead = true;
+        //    }
+        //}
 
-        public void Draw()
-        {
-            Global.spriteBatch.Draw(texture, position, Color.White);
-        }
+        //public void Draw()
+        //{
+        //    Global.spriteBatch.Draw(texture, position, Color.White);
+        //}
     }
 }

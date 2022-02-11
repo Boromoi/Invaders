@@ -14,7 +14,10 @@ namespace MonoGameInvaders
         public Vector2 position;
         public Vector2 velocity;
         public Texture2D texture;
-        public bool isFired;
+        public bool IsActive;
+
+        public int Damage => 1;
+
         //public float speed;
 
         public Bullet()
@@ -25,14 +28,14 @@ namespace MonoGameInvaders
 
         public void Reset()
         {
-            isFired = false;
+            IsActive = false;
             position.X = -1000f;
             velocity.Y = 0;
         }
 
         public void Update()
         {
-            if (isFired)
+            if (IsActive)
             {
                 if (position.Y < 0)
                 {
@@ -44,7 +47,7 @@ namespace MonoGameInvaders
 
         public void Draw()
         {
-            if (isFired)
+            if (IsActive)
             {
                 Global.spriteBatch.Draw(texture, position, Color.White);
             }
@@ -52,9 +55,9 @@ namespace MonoGameInvaders
 
         public void Fire(Vector2 startPosition)
         {
-            if (!isFired)
+            if (!IsActive)
             {
-                isFired = true;
+                IsActive = true;
                 position = startPosition;
                 velocity.Y = -3.0f;
             }
