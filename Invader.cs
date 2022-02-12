@@ -6,14 +6,15 @@ using System.Text;
 
 namespace MonoGameInvaders
 {
-    abstract class Invader : Ship
+    abstract class Invader : SpriteObject
     {
-        public Vector2 velocity;
-        public bool dead;
+        public Vector2 Velocity;
+        public bool IsDead;
+        public abstract int GetScore();
 
         public Invader(string assetName)
         {
-            texture = Global.content.Load<Texture2D>(assetName);
+            Texture = Global.content.Load<Texture2D>(assetName);
         }
 
         public static Invader Create(InvaderTypes invaderType)
@@ -40,26 +41,26 @@ namespace MonoGameInvaders
             return createdInvader;
         }
 
-        public void Update()        
+        public override void Update()        
         {
             if (HitPoints == 0)
             {
-                dead = true;
+                IsDead = true;
             }
 
-            position.X += velocity.X;
+            Position.X += Velocity.X;
 
-            if ((position.X > Global.width - texture.Width) || (position.X < 0))
+            if ((Position.X > Global.width - Texture.Width) || (Position.X < 0))
             {
-                position.X -= velocity.X;
-                velocity.X = -velocity.X;
-                position.Y += velocity.Y;
+                Position.X -= Velocity.X;
+                Velocity.X = -Velocity.X;
+                Position.Y += Velocity.Y;
             }
         }
 
         public void Draw()
         {
-            Global.spriteBatch.Draw(texture, position, Color.White);
+            Global.spriteBatch.Draw(Texture, Position, Color.White);
         }
     }
 }

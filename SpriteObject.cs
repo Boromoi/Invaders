@@ -6,11 +6,12 @@ using System.Text;
 
 namespace MonoGameInvaders
 {
-    internal abstract  class Ship
+    internal abstract  class SpriteObject
     {
+        public Guid Identity = Guid.NewGuid();
         public int HitPoints;
-        public Vector2 position;
-        public Texture2D texture;
+        public Vector2 Position;
+        public Texture2D Texture;
 
         private bool Overlaps(Vector2 position0, Texture2D texture0, Vector2 position1, Texture2D texture1)
         {
@@ -31,12 +32,14 @@ namespace MonoGameInvaders
 
         internal bool IsHit(Bullet theBullet)
         {
-            if (Overlaps(theBullet.position, theBullet.texture, this.position, this.texture))
+            if (Overlaps(theBullet.position, theBullet.texture, this.Position, this.Texture))
             {
                 this.HitPoints -= theBullet.Damage;
                 return true;
             }
             return false;
         }
+
+        public abstract void Update();
     }
 }

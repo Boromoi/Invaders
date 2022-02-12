@@ -18,8 +18,6 @@ namespace MonoGameInvaders
 
         public int Damage => 1;
 
-        //public float speed;
-
         public Bullet()
         {
             texture = Global.content.Load<Texture2D>("spr_bullet");
@@ -59,7 +57,7 @@ namespace MonoGameInvaders
             {
                 IsActive = true;
                 position = startPosition;
-                velocity.Y = -3.0f;
+                velocity.Y = -5.0f;
             }
         }
     }

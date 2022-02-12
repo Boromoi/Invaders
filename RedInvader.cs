@@ -9,13 +9,18 @@ namespace MonoGameInvaders
         const string AssetName = "spr_red_invader";
         public RedInvader():base(AssetName)
         {
-            position.X = Global.Random(100, Global.width - 100);
-            position.Y = texture.Height;
+            Position.X = Global.Random(100, Global.width - 100);
+            Position.Y = Texture.Height + 100;
 
-            velocity.X = 3.0f;
+            Velocity.X = 3.0f;
 
             HitPoints = 1;
-            dead = false;
+            IsDead = false;
+        }
+
+        public override int GetScore()
+        {
+            return 200;
         }
     }
 }

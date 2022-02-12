@@ -6,39 +6,30 @@ using System.Text;
 
 namespace MonoGameInvaders
 {
-    class Shield
+    class Shield:SpriteObject
     {
-        public Vector2 position;
-        public Texture2D texture;
-        public int hp;
-        public bool dead;
+        public bool IsDead;
 
-        public Shield()
+        public Shield(int x, int y)
         {
-            texture = Global.content.Load<Texture2D>("spr_shield");
-            Reset();
+            Texture = Global.content.Load<Texture2D>("spr_shield");
+            Position.X = x;
+            Position.Y = y;
+            HitPoints = 1;
+            IsDead = false;
         }
 
-        public void Reset()
+        public override void Update()
         {
-            position.X = Global.Random(100, Global.width - 100);
-            position.Y = Global.Random(250, Global.height - 100);
-
-            hp = 1;
-            dead = false;
-        }
-
-        public void Update()
-        {
-            if (hp == 0)
+            if (HitPoints == 0)
             {
-                dead = true;
+                IsDead = true;
             }
         }
 
         public void Draw()
         {
-            Global.spriteBatch.Draw(texture, position, Color.White);
+            Global.spriteBatch.Draw(Texture, Position, Color.White);
         }
     }
 }

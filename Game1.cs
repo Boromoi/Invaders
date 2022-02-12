@@ -13,6 +13,7 @@ namespace MonoGameInvaders
     /// </summary>
     public class Game1 : Game
     {
+        int totalScore = 0;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Texture2D background, scanlines;
@@ -21,7 +22,6 @@ namespace MonoGameInvaders
         Bullet theBullet;
         MotherShip motherShip;
         List<Shield> shields = new List<Shield>();
-        
         List<Invader> invaders = new List<Invader>();
 
         public Game1()
@@ -50,18 +50,9 @@ namespace MonoGameInvaders
             // Create and Initialize game objects
             thePlayer = new Player();
             theBullet = new Bullet();
-            motherShip = new MotherShip();
             
-            invaders.Add(motherShip);
-            for (int i = 0; i < 10; i++)
-            {
-                AddRandomInvader();
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                AddShield();
-            }
+            AddInvaders();
+            AddShields();
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -71,6 +62,17 @@ namespace MonoGameInvaders
             base.Initialize();
         }
 
+        private void AddInvaders()
+        {
+            motherShip = new MotherShip();
+            invaders.Add(motherShip);
+
+            for (int i = 0; i < 10; i++)
+            {
+                AddRandomInvader();
+            }
+        }
+
         private void AddRandomInvader()
         {
             var invaderTypeNumber = new Random().Next(1, 4);
@@ -78,10 +80,12 @@ namespace MonoGameInvaders
             invaders.Add(invader);
         }
 
-        private void AddShield()
+        private void AddShields()
         {
-            var currentShield = new Shield();
-            shields.Add(currentShield);
+            shields.Add(new Shield(80, 400));
+            shields.Add(new Shield(280, 400));
+            shields.Add(new Shield(480, 400));
+            shields.Add(new Shield(680, 400));
         }
 
         /// <summary>
@@ -98,44 +102,26 @@ namespace MonoGameInvaders
             thePlayer.Update();
             theBullet.Update();
 
-            foreach (var invader in invaders)
-            {
-                invader.Update();
-                if (!invader.dead && theBullet.IsActive)
-                {
-                    if(invader.IsHit(theBullet))
-                    {
-                        theBullet.IsActive = false;
-                    }    
-                }
-            }
-
-            //foreach (var shield in shields)
-            //{
-            //    shield.Update();
-            //    if (!shield.dead)
-            //    {
-            //        if (Overlaps(theBullet.position, theBullet.texture, shield.position, shield.texture) && theBullet.IsActive && !shield.dead)
-            //        {
-            //            shield.hp -= 1;
-            //            theBullet.IsActive = false;
-            //        }
-
-            //        foreach (var invader in invaders)
-            //        {
-            //            if (!invader.dead)
-            //            {
-            //                if (Overlaps(invader.position, invader.texture, shield.position, shield.texture) && !shield.dead)
-            //                {
-            //                    shield.hp -= 1;
-            //                    invader.hp -= 1;
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+            invaders.ForEach(i => CheckSpriteObjectAndBullet(i));
+            shields.ForEach(s => CheckSpriteObjectAndBullet(s));
 
             base.Update(gameTime);
+        }
+
+        private void CheckSpriteObjectAndBullet(SpriteObject sprite)
+        {
+            sprite.Update();
+            //if the bullet hit the sprite deactivate the bullet
+            if (theBullet.IsActive && sprite.IsHit(theBullet))
+            {
+                //The target was hit
+                //deactivate the bullet and update the total score
+                theBullet.IsActive = false;
+                if(sprite is Invader)
+                {
+                    totalScore += ((Invader)sprite).GetScore();
+                }
+            }
         }
 
         /// <summary>
@@ -152,26 +138,15 @@ namespace MonoGameInvaders
             thePlayer.Draw();
             theBullet.Draw();
 
-            foreach (var invader in invaders)
-            {
-                if (!invader.dead)
-                {
-                    invader.Draw();
-                }
-            }
+            //Remove all dead invaders.
+            invaders.RemoveAll(i => i.IsDead);
+            //Draw all invaders
+            invaders.ForEach(i => i.Draw());
 
-            foreach (var shield in shields)
-            {
-                if (!shield.dead)
-                {
-                    shield.Draw();
-                }
-            }
-
-            if (!motherShip.dead)
-            {
-                motherShip.Draw();
-            }
+            //Remove all dead shields
+            shields.RemoveAll(s => s.IsDead);
+            //Draw all shields
+            shields.ForEach(s => s.Draw());
 
             spriteBatch.Draw(scanlines, Global.screenRect, Color.White);
             spriteBatch.End();
